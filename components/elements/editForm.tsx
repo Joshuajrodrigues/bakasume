@@ -1,6 +1,7 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, useFieldArray } from "react-hook-form";
+import { PiTrashBold } from "react-icons/pi"
 import { z } from "zod";
 import {
     Form,
@@ -81,12 +82,18 @@ const EditForm = () => {
                                 name={`contact.${index}.value`}
                                 render={({ field }) => (
                                     <FormItem className={cn(index !== 0 && "-space-y-4")}>
-                                        <FormLabel className={cn(index !== 0 && "sr-only")}>Contact Info</FormLabel>
+                                        <FormLabel className={cn(index !== 0 && "hidden")}>Contact Info</FormLabel>
                                         <FormControl>
                                             <Input placeholder="" {...field} />
+
                                         </FormControl>
-                                        <Button className={cn(index === 0 && "sr-only")} onClick={() => removeContactFields(index)} type="button" size={"sm"} variant={"destructive"} >x</Button>
-                                        <FormDescription className={cn(index !== 0 && "sr-only")}>
+                                        <span className="w-full flex justify-end items-center" >
+
+                                            <Button variant={"link"} type="button" className={cn(index === 0 ? " hidden" : "text-red-500 px-0 py-8")} onClick={() => removeContactFields(index)}><PiTrashBold />Delete</Button>
+                                        </span>
+
+
+                                        <FormDescription className={cn(index !== 0 && "hidden")}>
                                             Add contact information like phone, email etc.
                                         </FormDescription>
                                         <FormMessage />
@@ -94,8 +101,8 @@ const EditForm = () => {
                                 )}
                             />
                         ))
-                    }
-                    <Button type="button" variant={"outline"} size={"sm"} onClick={() => addContactFields({ value: "" })}>Add more</Button>
+                    }<Button type="button" variant={"outline"} size={"sm"} onClick={() => addContactFields({ value: "" })}>Add more</Button>
+
 
 
                     <Button className="block" type="submit">Save & Preview</Button>
