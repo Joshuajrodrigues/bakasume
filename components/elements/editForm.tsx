@@ -85,6 +85,7 @@ const EditForm = () => {
                                         <FormControl>
                                             <Input placeholder="" {...field} />
                                         </FormControl>
+                                        <Button className={cn(index === 0 && "sr-only")} onClick={() => removeContactFields(index)} type="button" size={"sm"} variant={"destructive"} >x</Button>
                                         <FormDescription className={cn(index !== 0 && "sr-only")}>
                                             Add contact information like phone, email etc.
                                         </FormDescription>
