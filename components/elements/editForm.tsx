@@ -66,7 +66,7 @@ const EditForm = () => {
                                     <Input placeholder="Mark Zuckerbub" {...field} />
                                 </FormControl>
                                 <FormDescription>
-                                    This is your name displayed on the resume.
+                                    Your name to be displayed on the resume.
                                 </FormDescription>
                                 <FormMessage />
                             </FormItem>

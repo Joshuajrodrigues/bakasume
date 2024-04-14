@@ -2,7 +2,7 @@
 import { BlobProvider, Document, Font, Page, StyleSheet, Text } from '@react-pdf/renderer';
 import { Page as DocumentPage, Document as DocumentViewer, pdfjs } from 'react-pdf';
 import { Button } from '../ui/button';
-
+import { PiDownloadBold } from "react-icons/pi"
 import { useRef, useState } from 'react';
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -146,7 +146,7 @@ const Resume = (
 const ResumePreview = () => {
     const [numPages, setNumPages] = useState<number>(1);
     const [pageNumber, setPageNumber] = useState<number>(1)
-
+    const [isPageReady, setIsPageReady] = useState(false)
     function changePage(offset: number) {
         setPageNumber(prevPageNumber => prevPageNumber + offset);
     }
@@ -174,44 +174,56 @@ const ResumePreview = () => {
                     loading ? (
                         <Spin />
                     ) : (
-                        <DocumentViewer
-                            onLoadSuccess={onDocumentLoadSuccess}
-                            file={url}
-                            loading={loading ? <Spin />
-                                : null}
-                        >
+                        <>
+                            <DocumentViewer
+                                onLoadSuccess={onDocumentLoadSuccess}
+                                file={url}
+                                loading={loading ? <Spin />
+                                    : null}
+                            >
 
-                            <DocumentPage
-                                loading={loading ? <Spin /> : null}
-                                pageNumber={pageNumber}
-                                error={"Error"}
-                                width={parentRef.current?.clientWidth}
-                            />
-                        </DocumentViewer>
+                                <DocumentPage
+                                    loading={loading ? <Spin /> : null}
+                                    pageNumber={pageNumber}
+                                    onRenderSuccess={() => setIsPageReady(true)}
+                                    error={"Error"}
+                                    width={parentRef.current?.clientWidth}
+                                />
+                            </DocumentViewer>
+                            {
+                                isPageReady &&
+                                <div className='flex space-x-2'>
+
+
+                                    <Button
+                                        type="button"
+                                        variant={"outline"}
+                                        size={"sm"}
+                                        className=' w-24'
+                                        disabled={pageNumber <= 1}
+                                        onClick={previousPage}
+                                    >
+                                        Previous
+                                    </Button>
+                                    <Button
+                                        type="button"
+                                        variant={"outline"}
+                                        size={"sm"}
+                                        className=' w-24'
+                                        disabled={pageNumber >= numPages}
+                                        onClick={nextPage}
+                                    >
+                                        Next
+                                    </Button>
+
+                                </div>
+                            }
+                        </>
                     )
                 }
             </BlobProvider>
-            <div>
-                <p>
-                    Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
-                </p>
-                <button
-                    type="button"
-                    disabled={pageNumber <= 1}
-                    onClick={previousPage}
-                >
-                    Previous
-                </button>
-                <button
-                    type="button"
-                    disabled={pageNumber >= numPages}
-                    onClick={nextPage}
-                >
-                    Next
-                </button>
-            </div>
             {/* <embed type="application/pdf" title='resume' src={instance.url || ""}  /> */}
-            <Button className='w-64 m-4'>Download</Button>
+            <Button className='w-64 m-4'><PiDownloadBold className='mr-2' />Download</Button>
         </div>
     )
 }
