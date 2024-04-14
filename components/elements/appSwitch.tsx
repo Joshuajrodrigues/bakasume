@@ -1,5 +1,7 @@
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import EditForm from "./editForm";
+import ResumePreview from "./resumePreview";
 
 
 export function AppSwitch() {
@@ -12,7 +14,12 @@ export function AppSwitch() {
             <TabsContent value="edit">Make changes to your resume here.
                 <EditForm />
             </TabsContent>
-            <TabsContent value="preview">This is what it'll look like.</TabsContent>
+            <TabsContent value="preview">This is what it'll look like.
+
+
+                <ResumePreview />
+
+            </TabsContent>
         </Tabs>
     </div>;
 }
