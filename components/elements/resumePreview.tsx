@@ -8,7 +8,7 @@ Font.register({
 
 const ResumePreview = () => {
     return (
-        <PDFViewer className="w-full min-h-full">
+        <PDFViewer className=" h-svh w-svw">
             <Document >
                 <Page style={styles.body}>
                     <Text style={styles.header} fixed>
