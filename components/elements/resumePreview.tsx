@@ -143,7 +143,7 @@ const ResumePreview = () => {
     if (instance.error) return <div>Something went wrong</div>
     return (
         <div className='flex flex-col justify-center items-center'>
-            <iframe title='resume' src={instance.url || ""} className=" h-[calc(100svh-220px)] w-svw" />
+            <embed type="application/pdf" title='resume' src={instance.url || ""} className=" h-[calc(100svh-220px)] w-svw" />
             <Button className='w-64 m-4'>Download</Button>
         </div>
     )
