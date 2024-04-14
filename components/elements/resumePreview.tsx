@@ -1,8 +1,20 @@
 "use client"
-import { Document, Font, Page, StyleSheet, Text, usePDF } from '@react-pdf/renderer';
-import Image from 'next/image';
-import spin from '@/public/anime-spin.gif'
+import { BlobProvider, Document, Font, Page, StyleSheet, Text } from '@react-pdf/renderer';
+import { Page as DocumentPage, Document as DocumentViewer, pdfjs } from 'react-pdf';
 import { Button } from '../ui/button';
+
+import { useRef, useState } from 'react';
+import "react-pdf/dist/Page/AnnotationLayer.css";
+import "react-pdf/dist/Page/TextLayer.css";
+import Spin from './loading';
+
+pdfjs.GlobalWorkerOptions.workerSrc = new URL(
+    "pdfjs-dist/build/pdf.worker.min.js",
+    import.meta.url
+).toString();
+
+
+
 Font.register({
     family: 'Oswald',
     src: 'https://fonts.gstatic.com/s/oswald/v13/Y_TKV6o8WovbUd3m_X9aAA.ttf'
@@ -132,18 +144,73 @@ const Resume = (
 
 
 const ResumePreview = () => {
-    const [instance, updateInstance] = usePDF({ document: Resume })
+    const [numPages, setNumPages] = useState<number>(1);
+    const [pageNumber, setPageNumber] = useState<number>(1)
 
-    if (instance.loading) return <div className=' h-[50svh] w-svw flex flex-col justify-start items-center'>
-        <Image width={32} priority height={32} alt='loading...' src={spin} />
-        <div>
-            Loading...
-        </div>
-    </div>
-    if (instance.error) return <div>Something went wrong</div>
+    function changePage(offset: number) {
+        setPageNumber(prevPageNumber => prevPageNumber + offset);
+    }
+
+    function previousPage() {
+        changePage(-1);
+    }
+
+    function nextPage() {
+        changePage(1);
+    }
+
+    function onDocumentLoadSuccess({ numPages }: { numPages: number }): void {
+        setNumPages(numPages);
+        setPageNumber(1);
+    }
+    const parentRef = useRef<HTMLDivElement>(null);
+
+
+
     return (
-        <div className='flex flex-col justify-center items-center'>
-            <embed type="application/pdf" title='resume' src={instance.url || ""} className=" h-[calc(100svh-220px)] w-svw" />
+        <div ref={parentRef} className='flex flex-col justify-center items-center'>
+            <BlobProvider document={Resume}>
+                {({ blob, url, loading, error }) =>
+                    loading ? (
+                        <Spin />
+                    ) : (
+                        <DocumentViewer
+                            onLoadSuccess={onDocumentLoadSuccess}
+                            file={url}
+                            loading={loading ? <Spin />
+                                : null}
+                        >
+
+                            <DocumentPage
+                                loading={loading ? <Spin /> : null}
+                                pageNumber={pageNumber}
+                                error={"Error"}
+                                width={parentRef.current?.clientWidth}
+                            />
+                        </DocumentViewer>
+                    )
+                }
+            </BlobProvider>
+            <div>
+                <p>
+                    Page {pageNumber || (numPages ? 1 : '--')} of {numPages || '--'}
+                </p>
+                <button
+                    type="button"
+                    disabled={pageNumber <= 1}
+                    onClick={previousPage}
+                >
+                    Previous
+                </button>
+                <button
+                    type="button"
+                    disabled={pageNumber >= numPages}
+                    onClick={nextPage}
+                >
+                    Next
+                </button>
+            </div>
+            {/* <embed type="application/pdf" title='resume' src={instance.url || ""}  /> */}
             <Button className='w-64 m-4'>Download</Button>
         </div>
     )
