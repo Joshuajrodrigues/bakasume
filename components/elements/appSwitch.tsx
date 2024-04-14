@@ -6,7 +6,7 @@ import ResumePreview from "./resumePreview";
 
 export function AppSwitch() {
     return <div className="mt-2">
-        <Tabs defaultValue="edit" className="w-[400px] flex flex-col items-center justify-center">
+        <Tabs defaultValue="edit" className=" flex flex-col items-center justify-center">
             <TabsList>
                 <TabsTrigger className="w-24" value="edit">Edit</TabsTrigger>
                 <TabsTrigger className="w-24" value="preview">Preview</TabsTrigger>
