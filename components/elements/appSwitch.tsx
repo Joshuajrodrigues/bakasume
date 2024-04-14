@@ -11,14 +11,13 @@ export function AppSwitch() {
                 <TabsTrigger className="w-24" value="edit">Edit</TabsTrigger>
                 <TabsTrigger className="w-24" value="preview">Preview</TabsTrigger>
             </TabsList>
-            <TabsContent value="edit">Make changes to your resume here.
+            <TabsContent value="edit">
+                <span>Make changes to your resume here.</span>
                 <EditForm />
             </TabsContent>
-            <TabsContent value="preview">This is what it'll look like.
-
-
+            <TabsContent value="preview">
+                <span className="mx-10">This is what it'll look like.</span>
                 <ResumePreview />
-
             </TabsContent>
         </Tabs>
     </div>;
